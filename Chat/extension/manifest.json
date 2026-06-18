@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "TubeChat AI",
+  "version": "1.0",
+  "description": "Chat with any YouTube video transcript using Gemini.",
+  "permissions": ["activeTab"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
