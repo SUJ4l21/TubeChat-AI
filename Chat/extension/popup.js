@@ -1,5 +1,3 @@
-
-
 document.addEventListener("DOMContentLoaded", async () => {
   const chatBox = document.getElementById("chat-box");
   const userInput = document.getElementById("user-input");
@@ -27,11 +25,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     "<p id='status-msg' class='system-alert'>Reading video transcript and building AI index... Please wait.</p>";
 
   try {
-    const initResponse = await fetch("http://127.0.0.1:5000/initialize", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ video_id: videoId }),
-    });
+    const initResponse = await fetch(
+      "https://tubechat-api.onrender.com/initialize",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ video_id: videoId }),
+      },
+    );
 
     if (!initResponse.ok) {
       const errorData = await initResponse.json();
@@ -69,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     chatBox.scrollTop = chatBox.scrollHeight;
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/chat", {
+      const response = await fetch("https://tubechat-api.onrender.com/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ video_id: videoId, question: question }),
