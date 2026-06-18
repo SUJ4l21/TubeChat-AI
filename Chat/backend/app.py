@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
+import os
 
 
 from langchain_google_genai import GoogleGenerativeAIEmbeddings,ChatGoogleGenerativeAI
@@ -107,11 +108,12 @@ async def initialize_video(payload: InitializeRequest):
     
     try:
         
+        proxy_url = os.getenv("PROXY_URL")
         
-        # Format your proxy string
-        my_proxy = {
-            "http": "http://gnvglgig:9crc34h486c9@p.webshare.io:80/",
-            "https":"https://ipv4.webshare.io/"
+        # 2. Format it into the dictionary required by the API
+        my_proxies = {
+            "http": proxy_url,
+            "https": proxy_url
         }
 
         # Document Ingestion via Proxy
