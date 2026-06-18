@@ -106,10 +106,22 @@ async def initialize_video(payload: InitializeRequest):
         return {'status':'ready' ,"message": "Video already indexed in cache."}
     
     try:
-        # Document Ingestion
-        ytt_api = YouTubeTranscriptApi()
-        transcript_list = ytt_api.fetch(video_id, languages=['en'])
-        transcript = ' '.join(chunk.text for chunk in transcript_list.snippets)
+        
+        
+        # Format your proxy string
+        my_proxy = {
+            "http": "http://gnvglgig:9crc34h486c9@p.webshare.io:80/",
+            "https":"https://ipv4.webshare.io/"
+        }
+
+        # Document Ingestion via Proxy
+        transcript_data = YouTubeTranscriptApi.get_transcript(
+            video_id, 
+            languages=['en'],
+            proxies=my_proxy
+        )
+        
+        transcript = ' '.join(chunk['text'] for chunk in transcript_data)
         
         # Text Splitting
         chunks = splitter.create_documents([transcript])
