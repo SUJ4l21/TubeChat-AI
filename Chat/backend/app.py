@@ -116,14 +116,15 @@ async def initialize_video(payload: InitializeRequest):
             "https": proxy_url
         }
 
+        ytt_api = YouTubeTranscriptApi()
         # Document Ingestion via Proxy
-        transcript_data = YouTubeTranscriptApi.get_transcript(
+        transcript_data = ytt_api.fetch(
             video_id, 
             languages=['en'],
-            proxies=my_proxy
+            proxies=my_proxies
         )
         
-        transcript = ' '.join(chunk['text'] for chunk in transcript_data)
+        transcript = ' '.join(chunk.text for chunk in transcript_data.snippets)
         
         # Text Splitting
         chunks = splitter.create_documents([transcript])
