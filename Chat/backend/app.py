@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 import os
+from youtube_transcript_api.proxies import GenericProxyConfig
 
 
 from langchain_google_genai import GoogleGenerativeAIEmbeddings,ChatGoogleGenerativeAI
@@ -111,17 +112,16 @@ async def initialize_video(payload: InitializeRequest):
         proxy_url = os.getenv("PROXY_URL")
         
         # 2. Format it into the dictionary required by the API
-        my_proxies = {
-            "http": proxy_url,
-            "https": proxy_url
-        }
+        my_proxy_config = GenericProxyConfig(
+            http_url=proxy_url,
+            https_url=proxy_url
+        )
 
-        ytt_api = YouTubeTranscriptApi()
+        ytt_api = YouTubeTranscriptApi(proxy_config=my_proxy_config)
         # Document Ingestion via Proxy
         transcript_data = ytt_api.fetch(
             video_id, 
-            languages=['en'],
-            proxies=my_proxies
+            languages=['en']
         )
         
         transcript = ' '.join(chunk.text for chunk in transcript_data.snippets)
