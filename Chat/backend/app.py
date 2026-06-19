@@ -2,9 +2,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
-import os
-from youtube_transcript_api.proxies import GenericProxyConfig
-
 
 from langchain_google_genai import GoogleGenerativeAIEmbeddings,ChatGoogleGenerativeAI
 from dotenv import load_dotenv
@@ -109,15 +106,7 @@ async def initialize_video(payload: InitializeRequest):
     
     try:
         
-        proxy_url = os.getenv("PROXY_URL")
-        
-        # 2. Format it into the dictionary required by the API
-        my_proxy_config = GenericProxyConfig(
-            http_url=proxy_url,
-            https_url=proxy_url
-        )
-
-        ytt_api = YouTubeTranscriptApi(proxy_config=my_proxy_config)
+        ytt_api = YouTubeTranscriptApi()
         # Document Ingestion via Proxy
         transcript_data = ytt_api.fetch(
             video_id, 
